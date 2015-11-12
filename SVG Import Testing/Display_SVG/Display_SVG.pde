@@ -1,10 +1,16 @@
-PShape map;
+import geomerative.*;
+
+RShape map;
+
+int first = 0;
 
 void setup() {
   size(800 , 1000);
-  // The file "bot1.svg" must be in the data folder
-  // of the current sketch to load successfully
-  map = loadShape("mapout.svg");
+  smooth ();
+  map = RG.loadShape("mapout.svg");
+  map = RG.centerIn(map, g, 100);
+  
+  
 } 
 
 void draw(){
