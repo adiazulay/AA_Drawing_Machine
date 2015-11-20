@@ -11,19 +11,19 @@ void setup() {
   
   RG.init(this);
   
-  topo = RG.loadShape("mapout.svg");
+  topo = RG.loadShape("illustmap.svg");
   topo = RG.centerIn(topo, g, 100);
   
   
 } 
 
 void draw(){
- translate(width/2, height/2);
+  translate(width/2, height/2);
   background(#2D4D83);
 
   noFill();
   stroke(255, 200);
-  float splitPos = map(mouseX, 0, width, 0, 1);
+  float splitPos = map(mouseY, 0, height, 0, 1);
   
   RShape[] splitShapes = RG.split(topo, splitPos);
  
