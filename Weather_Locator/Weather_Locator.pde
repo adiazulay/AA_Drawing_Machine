@@ -1,8 +1,9 @@
 import processing.serial.*;
 
 Serial myPort;
-String loc;
-
+String lat;
+String lon;
+String location;
 
 
 void setup() {
@@ -15,6 +16,8 @@ void setup() {
   println(des);
   String portName = Serial.list()[2];
   myPort = new Serial(this, portName, 115200);
+  myPort.write(665566);
+  
   
 }
 
@@ -25,9 +28,14 @@ void draw(){
 
 void getGPS () {
   if (myPort.available()>0){
-    myPort.bufferUntil('-');
-    loc = myPort.readStringUntil('+');
+    location = myPort.readString();
+    if (location != null){
+      String[] loc = splitTokens(location, ",");
+      lat = loc[0];
+      lon = loc[1];
+    }
   }
-  println(loc);
-  delay (1000);
+  println(lat);
+  println(lon);
+  delay (2000);
 }
