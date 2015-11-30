@@ -1,17 +1,6 @@
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
 
-// If you're using a GPS module:
-// Connect the GPS Power pin to 5V
-// Connect the GPS Ground pin to ground
-// If using software serial (sketch example default):
-//   Connect the GPS TX (transmit) pin to Digital 3
-//   Connect the GPS RX (receive) pin to Digital 2
-// If using hardware serial (e.g. Arduino Mega):
-//   Connect the GPS TX (transmit) pin to Arduino RX1, RX2 or RX3
-//   Connect the GPS RX (receive) pin to matching TX1, TX2 or TX3
-
-
 // If using software serial, keep this line enabled
 // (you can change the pin numbers to match your wiring):
 SoftwareSerial mySerial(3, 2);
@@ -34,7 +23,7 @@ void setup()
   // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
   // also spit it out
   Serial.begin(115200);
-  //Serial.println("Adafruit GPS library basic test!");
+  //Serial.println("GPS module starting up!");
 
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
@@ -136,9 +125,10 @@ void loop()                     // run over and over again
     */
     if (GPS.fix) {
       //Serial.print("Location: ");
-      Serial.print(GPS.latitudeDegrees, 4);
-      Serial.print(", "); 
+      Serial.println(GPS.latitudeDegrees, 4);
+      //Serial.print(", "); 
       Serial.println(GPS.longitudeDegrees, 4);
+      Serial.print("*");
       /*
       Serial.print("Speed (knots): "); Serial.println(GPS.speed);
       Serial.print("Angle: "); Serial.println(GPS.angle);
