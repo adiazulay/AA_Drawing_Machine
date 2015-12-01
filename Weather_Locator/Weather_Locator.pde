@@ -9,29 +9,28 @@ String location;
 
 
 void setup() {
-  JSONObject load = loadJSONObject("http://api.openweathermap.org/data/2.5/weather?q=London&appid=2de143494c0b295cca9337e1e96b00e0");
+  String portName = Serial.list()[2];
+  myPort = new Serial(this, portName, 115200);
+  delay (5000);
+  getGPS();
+  apiLocate();
+  JSONObject load = loadJSONObject(apiCall);
   println (load);
   JSONArray weather = load.getJSONArray ("weather");
   println (weather);
   JSONObject weatherOb = weather.getJSONObject(0);
   String des = weatherOb.getString("main");
   println(des);
-  String portName = Serial.list()[2];
-  myPort = new Serial(this, portName, 115200);
-  delay (5000);
-
-  
-  
 }
 
 void draw(){
-    getGPS();
+   
   
 }
 
 void getGPS () {
   if (myPort.available()>0){
-    myPort.buffer(3);
+    myPort.buffer(5);
    /*location = myPort.readStringUntil('*');
    println(location);
    if (location != null){
@@ -57,4 +56,8 @@ void serialEvent (Serial myPort){
       lat = loc[0];
       lon = loc[1];
    }
+}
+
+void apiCall (String apiWeb){
+  
 }
