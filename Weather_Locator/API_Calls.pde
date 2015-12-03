@@ -6,7 +6,6 @@ String apiMid = "&lon=";
 void apiLocate (){
   String apiLon = str (lonUp);
   String apiLat = str (latUp);
-  println (apiLon);
   String [] apiArray = new String [5];
   apiArray[0] = apiAddress;
   apiArray[1] = apiLat;
