@@ -9,11 +9,13 @@ String location;
 
 
 void setup() {
+  printArray  (Serial.list());
   String portName = Serial.list()[2];
   myPort = new Serial(this, portName, 115200);
   delay (5000);
   getGPS();
   apiLocate();
+  
   JSONObject load = loadJSONObject(apiCall);
   println (load);
   JSONArray weather = load.getJSONArray ("weather");
@@ -21,6 +23,7 @@ void setup() {
   JSONObject weatherOb = weather.getJSONObject(0);
   String des = weatherOb.getString("main");
   println(des);
+  getData();
 }
 
 void draw(){
@@ -56,8 +59,4 @@ void serialEvent (Serial myPort){
       lat = loc[0];
       lon = loc[1];
    }
-}
-
-void apiCall (String apiWeb){
-  
 }
