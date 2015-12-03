@@ -15,9 +15,7 @@ void setup() {
   printArray  (Serial.list());
   String portName = Serial.list()[2];
   myPort = new Serial(this, portName, 115200);
-  delay (5000);
-  //getGPS();
-  //apiLocate();
+  myPort.bufferUntil(100);
   /*
   JSONObject load = loadJSONObject(apiCall);
   println (load);
@@ -45,24 +43,30 @@ void update (int x, int y){
 }
 void getGPS () {
   if (myPort.available()>0){
-    myPort.buffer(5);
-   /*location = myPort.readStringUntil('*');
-   println(location);
+    myPort.bufferUntil('%');
+   location = myPort.readStringUntil('*');
    if (location != null){
       float[] loc = float (splitTokens(location, "\n*"));
       lat = loc[0];
       lon = loc[1];
     }
-    */
+    
   }
   
   latUp = int(lat);
   lonUp = int(lon);
+  
+  if (lonUp != 0 && latUp != 0){
   println(latUp);
   println(lonUp);
+  apiLocate();
+  getData();
   delay (2000);
+  } else {
+    println ("gps not connected");
+  }
 }
-
+/*
 void serialEvent (Serial myPort){
   location = myPort.readStringUntil('*');
    //println(location);
@@ -73,20 +77,5 @@ void serialEvent (Serial myPort){
    }
 }
 
-boolean overRect(int x, int y, int width, int height)  {
-  if (mouseX >= x && mouseX <= x+width && 
-      mouseY >= y && mouseY <= y+height) {
-    return true;
-  } else {
-    return false;
-  }
-}
 
-void mousePressed() {
- 
-  if (gpsButton) {
-    getGPS();
-    apiLocate();
-    getData();
-  }
-}
+*/

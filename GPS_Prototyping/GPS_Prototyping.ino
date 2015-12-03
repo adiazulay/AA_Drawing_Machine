@@ -137,4 +137,10 @@ void loop()                     // run over and over again
       */
     }
   }
+  if (Serial.available()>0){
+    int inByte = Serial.read();
+    if (inByte == '%'){
+      Serial.print ('V');
+    }
+  }
 }
