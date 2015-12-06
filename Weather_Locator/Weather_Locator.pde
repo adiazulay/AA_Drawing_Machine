@@ -9,8 +9,11 @@ String location;
 
 void setup() {
   size(400, 200);
-  rectX = width/2-rectSize-10;
-  rectY = height/2-rectSize/2;
+  getButtonX = width/2-rectSize-10;
+  getButtonY = height/2-rectSize/2;
+  
+  sendDataX = width/2-rectSize+120;
+  sendDataY = height/2-rectSize/2;
   
   printArray  (Serial.list());
   String portName = Serial.list()[2];
@@ -30,20 +33,27 @@ void setup() {
 
 void draw(){ 
    update(mouseX, mouseY);
-   rect(rectX, rectY, rectSize, rectSize);
+   drawGUI();
  
 }
 
 void update (int x, int y){
-  if ( overRect(rectX, rectY, rectSize, rectSize) ) {
+  if ( overRect(getButtonX, getButtonY, rectSize, rectSize) ) {
     gpsButton = true;
   } else {
     gpsButton= false;
   }
+  if ( overRect(sendDataX, sendDataY, rectSize, rectSize) ) {
+    sendButton = true;
+  } else {
+    sendButton = false;
+  }
 }
 void getGPS () {
+  myPort.write ('&');
+  delay (1000);
   if (myPort.available()>0){
-    myPort.bufferUntil('%');
+    myPort.bufferUntil('*');
    location = myPort.readStringUntil('*');
    if (location != null){
       float[] loc = float (splitTokens(location, "\n*"));
@@ -66,16 +76,3 @@ void getGPS () {
     println ("gps not connected");
   }
 }
-/*
-void serialEvent (Serial myPort){
-  location = myPort.readStringUntil('*');
-   //println(location);
-   if (location != null){
-      float[] loc = float (splitTokens(location, "\n*"));
-      lat = loc[0];
-      lon = loc[1];
-   }
-}
-
-
-*/

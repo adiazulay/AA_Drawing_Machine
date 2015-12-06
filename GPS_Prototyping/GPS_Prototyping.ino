@@ -1,5 +1,17 @@
+/* 
+Drawing Machine Firmware v0.2.0
+
+@author : Adi Azulay
+
+*/
+
+//Libraries
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+#include "utility/Adafruit_PWMServoDriver.h"
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
+#include <AccelStepper.h> 
 
 // If using software serial, keep this line enabled
 // (you can change the pin numbers to match your wiring):
@@ -16,6 +28,14 @@ Adafruit_GPS GPS(&mySerial);
 // off by default!
 boolean usingInterrupt = false;
 void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
+
+//tokens
+boolean sendData = true;
+
+//drawing variables
+float temp;
+bool endStopState = HIGH;
+bool homeStopState = HIGH;
 
 void setup()  
 {
@@ -51,6 +71,7 @@ void setup()
   delay(1000);
   // Ask for firmware version
   mySerial.println(PMTK_Q_RELEASE);
+  drawSetup();
 }
 
 
@@ -81,8 +102,13 @@ void useInterrupt(boolean v) {
 }
 
 uint32_t timer = millis();
-void loop()                     // run over and over again
+void loop()
 {
+  int v = Serial.read();
+  if (v == '&'){
+    sendData = true;
+  }
+  
   // in case you are not using the interrupt above, you'll
   // need to 'hand query' the GPS, not suggested :(
   if (! usingInterrupt) {
@@ -91,6 +117,7 @@ void loop()                     // run over and over again
     // if you want to debug, this is a good time to do it!
     if (GPSECHO)
       if (c) Serial.print(c);
+      
   }
   
   // if a sentence is received, we can check the checksum, parse it...
@@ -108,8 +135,9 @@ void loop()                     // run over and over again
   if (timer > millis())  timer = millis();
 
   // approximately every 2 seconds or so, print out the current stats
-  if (millis() - timer > 2000) { 
-    timer = millis(); // reset the timer
+
+    //timer = millis(); // reset the timer
+    if (sendData == true){
     /*
     Serial.print("\nTime: ");
     Serial.print(GPS.hour, DEC); Serial.print(':');
@@ -123,12 +151,14 @@ void loop()                     // run over and over again
     Serial.print("Fix: "); Serial.print((int)GPS.fix);
     Serial.print(" quality: "); Serial.println((int)GPS.fixquality); 
     */
+    
     if (GPS.fix) {
       //Serial.print("Location: ");
       Serial.println(GPS.latitudeDegrees, 4);
       //Serial.print(", "); 
       Serial.println(GPS.longitudeDegrees, 4);
       Serial.print("*");
+      sendData = false;
       /*
       Serial.print("Speed (knots): "); Serial.println(GPS.speed);
       Serial.print("Angle: "); Serial.println(GPS.angle);
@@ -143,4 +173,6 @@ void loop()                     // run over and over again
       Serial.print ('V');
     }
   }
+  
 }
+

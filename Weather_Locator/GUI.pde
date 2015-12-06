@@ -1,6 +1,16 @@
 boolean gpsButton = false;
+boolean sendButton = false;
 int rectSize = 90;
-int rectX, rectY; 
+int getButtonX, getButtonY; 
+
+int sendDataX, sendDataY;
+
+void drawGUI(){
+  fill (0,0,255);
+  rect(getButtonX, getButtonY, rectSize, rectSize);
+  fill (0,255,255);
+  rect(sendDataX, sendDataY, rectSize, rectSize);
+}
 
 boolean overRect(int x, int y, int width, int height)  {
   if (mouseX >= x && mouseX <= x+width && 
@@ -11,11 +21,16 @@ boolean overRect(int x, int y, int width, int height)  {
   }
 }
 
+
+
 void mousePressed() {
  
   if (gpsButton) {
+    myPort.clear();
     getGPS();
-    writeVars();
-    
+    //writeVars();
+  }
+  if (sendButton){
+  writeVars();
   }
 }
